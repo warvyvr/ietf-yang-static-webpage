@@ -1,0 +1,67 @@
+import os
+import sys
+import jinja2
+import json
+import re
+
+def render(template_path, context):
+    path, filename = os.path.split(template_path)
+    return jinja2.Environment(
+        loader=jinja2.FileSystemLoader(path or './')
+    ).get_template(filename).render(context)
+
+
+
+def dashboard(data):
+    d = {}
+    for area in data:
+        if area == 'meta':
+            continue
+        for wg in data[area]:
+            num_in_wg = 0
+            for artifact in data[area][wg]:
+                num_in_wg += len(artifact['models'])
+            #num_in_area += num_in_wg
+            if (d.has_key(area)):
+                d[area][wg] = num_in_wg
+            else:
+                d[area] = {wg:num_in_wg}
+
+        #d[area]['num'] = num_in_area
+
+    return d
+
+def name_of_area(data):
+    names = {}
+    for area in data:
+        if area == 'meta':
+            continue
+        names[area] = re.search('\((.*)\)',area).group(1)
+    return names
+
+def run(json_file, path):
+    with open(json_file) as data_file:
+        data = json.load(data_file)
+
+        area_short_names = name_of_area(data)
+
+        dashboard_data = dashboard(data)
+        #print dashboard_data
+        d = render("./template/dashboard.html",{"dashboard":dashboard_data, "short_name":area_short_names})
+        html_file = open(os.path.join(path,'dashboard.html'),'w')
+        html_file.write(d)
+
+        for area in data:
+            if area != 'meta':
+                filename = os.path.join(path, '%s.html' %(area_short_names[area]))
+                d = render("./template/index.html",{"context":data[area], "area":area})
+                html_file = open(filename,'w')
+                html_file.write(d)
+                print "write file to %s" %(filename)
+
+
+if __name__ == '__main__':
+    if (len(sys.argv) > 2):
+        run(sys.argv[1], sys.argv[2])
+    else:
+        run(sys.argv[1],"./")
