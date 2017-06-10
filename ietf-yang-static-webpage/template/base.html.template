@@ -29,11 +29,11 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{short_name[area]}}<b class="caret"></b></a>
                 <span class="dropdown-arrow"></span>
                 <ul class="dropdown-menu">
+                  <li><a href="./{{short_name[area]}}.html">{{area}}</a></li>
+                  <li class="divider"></li>
                   {% for wg in data[area] %}
                   <li><a href="./{{short_name[area]}}.html#{{wg}}">{{wg}}</a></li>
                   {% endfor %}
-                  <li class="divider"></li>
-                  <li><a href="#">Area:{{area}}</a></li>
                 </ul>
               </li>
             {% endfor %}

@@ -1,6 +1,7 @@
 {% extends "base.html.template" %}
 {% block title %}YANG model of {{area_name}}{% endblock %}
 {% block body %}
+<div style="height:60px" id="{{wg}}"></div>
 <h3 align="center">YANG model of {{area_name}}</h1>
 <h5 align="center">last sync time(UTC):{{t}}</h3>
 {% for wg in data[area_name] %}
