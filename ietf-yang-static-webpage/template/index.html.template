@@ -4,12 +4,12 @@
 <div class="container" align="center">
   <div style="height:60px"></div>
   <img src="./yinyang.jpg" width="30%"/>
-</div>
-<div class="demo-headline">
   <h3 align="center">IETF YANG model dashboard</h3>
   <h8 align="center">The website is deisgned to provide an overview of all YANG models on IETF website </h8>
   <br/>
   <a align="center"><i>last sync time(UTC):{{t}}</i></a>
+</div>
+<div class="container">
   {% for area in dashboard %}
   <div style="height:60px"></div>
   <h6 align="center"><a href="./{{short_name[area]}}.html">{{area}}</a></h6>
@@ -32,5 +32,26 @@
     </tbody>
   </table>
   {% endfor %}
+</div>
+<div class="bad_requests" align="center">
+  <div style="height:60px"></div>
+  <div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" 
+           href="#collapseOne">
+          the following urls are not successfully processed({{bad_requests|length}})
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in">
+      <div class="panel-body">
+        {% for url in bad_requests %}
+          <a href="{{url}}">{{url}}</a><br/>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

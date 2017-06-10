@@ -61,9 +61,20 @@ def run(json_file, path):
         dashboard_data = dashboard(data)
         utc_time = utc_time_from(data['meta']['finish_time'])
 
+        bad_requests = []
+        for item in ['wg','area','artifact']:
+            bad_requests += data['meta']['bad_requests'][item]
+
         data.pop('meta',None)
 
-        d = render("./template/index.html.template",{"dashboard":dashboard_data, "data":data, "short_name":s, "t":utc_time })
+        context = { "dashboard":dashboard_data,
+                    "data":data,
+                    "short_name":s,
+                    "t":utc_time,
+                    "bad_requests":bad_requests 
+                }
+
+        d = render("./template/index.html.template",context)
         html_file = open(os.path.join(path,'index.html'),'w')
         html_file.write(d)
 
