@@ -13,27 +13,24 @@
     <script src="dist/js/flat-ui.min.js"></script>
     <div class="container">
       <div class="demo-headline">
+        <h3 align="center">ietf yang model dashboard</h3>
+        <h6 align="center">last sync time(UTC):{{t}}</h6>
         <table class="table">
-          <caption>YANG model of {{area}} </caption>
           <thead>
             <tr>
-              <th>Work Group</th>
-              <th>Document Name</th>
-              <th>Model Name</th>
+              <th>Area Name</th>
+              <th>WG Name</th>
+              <th>Number of YANG models</th>
             </tr>
           </thead>
           <tbody>
-            {%set idx = 1%}
-            {% for wg in context %}
-              {% for artifact in context[wg] %}
-                {% for yang in artifact['models'] %}
-                  <tr>
-                    <td>{{wg}}</td>
-                    <td><a href='{{artifact['url']}}'>{{artifact['name']}}</a></td>
-                    <td>{{yang}}</td>
-                  </tr>
-                  {%set idx = idx + artifact['models']|length %}
-                {% endfor %}
+            {% for area in dashboard %}
+              {% for wg in dashboard[area] %}
+                <tr>
+                  <td><a href='./{{short_name[area]}}.html'>{{area}}</a></td>
+                  <td>{{wg}}</td>
+                  <td>{{dashboard[area][wg]}}</td>
+                </tr>
               {% endfor %}
             {% endfor %}
           </tbody>

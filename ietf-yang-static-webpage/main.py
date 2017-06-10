@@ -39,6 +39,19 @@ def name_of_area(data):
         names[area] = re.search('\((.*)\)',area).group(1)
     return names
 
+def utc_time_from(local_time):
+    print local_time
+    import time
+    from datetime import datetime
+    d = datetime.strptime(local_time,"%Y-%m-%d %H:%M:%S.%f")
+    t = time.mktime(d.timetuple())
+    utc_time_st = datetime.utcfromtimestamp(t)
+    #utc_time_str = utc_time_st.strftime("%Y-%m-%d %H:%M:%S %z")
+    utc_time_str = utc_time_st.isoformat()
+
+    return utc_time_str
+
+
 def run(json_file, path):
     with open(json_file) as data_file:
         data = json.load(data_file)
@@ -46,15 +59,17 @@ def run(json_file, path):
         area_short_names = name_of_area(data)
 
         dashboard_data = dashboard(data)
+        utc_time = utc_time_from(data['meta']['finish_time'])
+
         #print dashboard_data
-        d = render("./template/dashboard.html",{"dashboard":dashboard_data, "short_name":area_short_names})
-        html_file = open(os.path.join(path,'dashboard.html'),'w')
+        d = render("./template/index.html",{"dashboard":dashboard_data, "short_name":area_short_names,"t":utc_time})
+        html_file = open(os.path.join(path,'index.html'),'w')
         html_file.write(d)
 
         for area in data:
             if area != 'meta':
                 filename = os.path.join(path, '%s.html' %(area_short_names[area]))
-                d = render("./template/index.html",{"context":data[area], "area":area})
+                d = render("./template/area.html",{"context":data[area], "area":area,"t":utc_time})
                 html_file = open(filename,'w')
                 html_file.write(d)
                 print "write file to %s" %(filename)
