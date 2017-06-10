@@ -56,20 +56,23 @@ def run(json_file, path):
     with open(json_file) as data_file:
         data = json.load(data_file)
 
-        area_short_names = name_of_area(data)
+        s = name_of_area(data)
 
         dashboard_data = dashboard(data)
         utc_time = utc_time_from(data['meta']['finish_time'])
 
+        data.pop('meta',None)
         #print dashboard_data
-        d = render("./template/index.html.template",{"dashboard":dashboard_data, "short_name":area_short_names,"t":utc_time})
+
+        d = render("./template/index.html.template",{"dashboard":dashboard_data, "data":data, "short_name":s, "t":utc_time })
         html_file = open(os.path.join(path,'index.html'),'w')
         html_file.write(d)
 
+
         for area in data:
             if area != 'meta':
-                filename = os.path.join(path, '%s.html' %(area_short_names[area]))
-                d = render("./template/area.html.template",{"context":data[area], "area":area,"t":utc_time})
+                filename = os.path.join(path, '%s.html' %(s[area]))
+                d = render("./template/area.html.template",{"area_name":area, "data":data, "short_name":s, "t":utc_time})
                 html_file = open(filename,'w')
                 html_file.write(d)
                 print "write file to %s" %(filename)
