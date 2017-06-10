@@ -1,28 +1,36 @@
 {% extends "base.html.template" %}
 {% block title %}IETF YANG{% endblock %}
 {% block body %}
+<div class="container" align="center">
+  <div style="height:60px"></div>
+  <img src="./yinyang.jpg" width="30%"/>
+</div>
 <div class="demo-headline">
-        <h3 align="center">ietf yang model dashboard</h3>
-        <h6 align="center">last sync time(UTC):{{t}}</h6>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Area Name</th>
-              <th>WG Name</th>
-              <th>Number of YANG models</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for area in dashboard %}
-              {% for wg in dashboard[area] %}
-                <tr>
-                  <td><a href='./{{short_name[area]}}.html'>{{area}}</a></td>
-                  <td><a href='./{{short_name[area]}}.html#{{wg}}'>{{wg}}</a></td>
-                  <td>{{dashboard[area][wg]}}</td>
-                </tr>
-              {% endfor %}
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+  <h3 align="center">IETF YANG model dashboard</h3>
+  <h8 align="center">The website is deisgned to provide an overview of all YANG models on IETF website </h8>
+  <br/>
+  <a align="center"><i>last sync time(UTC):{{t}}</i></a>
+  {% for area in dashboard %}
+  <div style="height:60px"></div>
+  <h6 align="center"><a href="./{{short_name[area]}}.html">{{area}}</a></h6>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th align="left">WG Name</th>
+        <th align="left">Number of YANG models</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for wg in dashboard[area] %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td><a href='./{{short_name[area]}}.html#{{wg}}'>{{wg}}</a></td>
+            <td>{{dashboard[area][wg]}}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+</div>
 {% endblock %}

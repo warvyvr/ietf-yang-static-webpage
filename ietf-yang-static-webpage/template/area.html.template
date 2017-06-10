@@ -1,23 +1,26 @@
 {% extends "base.html.template" %}
-{% block title %}IETF YANG{% endblock %}
+{% block title %}YANG model of {{area_name}}{% endblock %}
 {% block body %}
-<h3 align="center">YANG model of {{area}}</h1>
+<h3 align="center">YANG model of {{area_name}}</h1>
 <h5 align="center">last sync time(UTC):{{t}}</h3>
-<h1> </h1>
-<h1> </h1>
 {% for wg in data[area_name] %}
-<h5 align="center" id="{{wg}}">{{wg}}</h5>
+<div style="height:60px" id="{{wg}}"></div>
+<h5 align="center">{{wg}}</h5>
 <table class="table">
   <thead>
     <tr>
+      <th>#</th>
       <th>Document Name</th>
       <th>Model Name</th>
     </tr>
   </thead>
   <tbody>
+      {% set cnt = [0]%}
       {% for artifact in data[area_name][wg] %}
         {% for yang in artifact['models'] %}
+          {% if cnt.append(cnt.pop() + 1) %}{% endif %} 
           <tr>
+            <td>{{cnt[0]}}</td>
             <td><a href='{{artifact['url']}}'>{{artifact['name']}}</a></td>
             <td>{{yang}}</td>
           </tr>

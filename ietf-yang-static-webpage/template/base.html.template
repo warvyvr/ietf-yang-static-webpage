@@ -7,7 +7,7 @@
     <link href="dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="dist/css/flat-ui.css" rel="stylesheet">
     <link href="docs/assets/css/demo.css" rel="stylesheet">
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico">
   {% endblock %}
   </head>
   <body>
@@ -15,7 +15,7 @@
     <script src="dist/js/flat-ui.min.js"></script>
     <div class="row demo-row">
       <div class="col-xs-12">
-        <nav class="navbar navbar-inverse navbar-embossed" role="navigation">
+        <nav class="navbar navbar-fixed-top navbar-inverse navbar-embossed" role="navigation">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
               <span class="sr-only">Toggle navigation</span>
@@ -38,7 +38,7 @@
               </li>
             {% endfor %}
              </ul>
-             <form class="navbar-form navbar-right" action="#" role="search">
+             <!--form class="navbar-form navbar-right" action="#" role="search">
               <div class="form-group">
                 <div class="input-group">
                   <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
@@ -47,7 +47,7 @@
                   </span>
                 </div>
               </div>
-            </form>
+            </form-->
           </div><!-- /.navbar-collapse -->
         </nav><!-- /navbar -->
       </div>
