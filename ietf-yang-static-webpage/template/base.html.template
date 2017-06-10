@@ -32,9 +32,11 @@
                   {% for wg in data[area] %}
                   <li><a href="./{{short_name[area]}}.html#{{wg}}">{{wg}}</a></li>
                   {% endfor %}
+                  <li class="divider"></li>
+                  <li><a href="#">Area:{{area}}</a></li>
                 </ul>
               </li>
-            {% endfor %}  
+            {% endfor %}
              </ul>
              <form class="navbar-form navbar-right" action="#" role="search">
               <div class="form-group">
