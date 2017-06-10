@@ -62,14 +62,14 @@ def run(json_file, path):
         utc_time = utc_time_from(data['meta']['finish_time'])
 
         #print dashboard_data
-        d = render("./template/index.html",{"dashboard":dashboard_data, "short_name":area_short_names,"t":utc_time})
+        d = render("./template/index.html.template",{"dashboard":dashboard_data, "short_name":area_short_names,"t":utc_time})
         html_file = open(os.path.join(path,'index.html'),'w')
         html_file.write(d)
 
         for area in data:
             if area != 'meta':
                 filename = os.path.join(path, '%s.html' %(area_short_names[area]))
-                d = render("./template/area.html",{"context":data[area], "area":area,"t":utc_time})
+                d = render("./template/area.html.template",{"context":data[area], "area":area,"t":utc_time})
                 html_file = open(filename,'w')
                 html_file.write(d)
                 print "write file to %s" %(filename)
