@@ -12,6 +12,7 @@
     <tr>
       <th>#</th>
       <th>Document Name</th>
+      <th>Document Type</th>
       <th>Model Name</th>
     </tr>
   </thead>
@@ -23,6 +24,7 @@
           <tr>
             <td>{{cnt[0]}}</td>
             <td><a href='{{artifact['url']}}'>{{artifact['name']}}</a></td>
+            <td>{{artifact['category']}}</td>
             <td>{{yang}}</td>
           </tr>
         {% endfor %}
