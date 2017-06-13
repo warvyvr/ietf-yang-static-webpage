@@ -25,7 +25,7 @@
         {% for wg in dashboard[area] %}
           <tr>
             <td>{{loop.index}}</td>
-            <td><a href='./{{short_name[area]}}.html#{{wg}}'>{{wg}}</a></td>
+            <td class="wg" id="{{wg}}"><a href='./{{short_name[area]}}.html#{{wg}}'>{{wg}}</a></td>
             <td>{{dashboard[area][wg]}}</td>
           </tr>
         {% endfor %}

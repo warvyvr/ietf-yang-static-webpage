@@ -21,11 +21,11 @@
       {% for artifact in data[area_name][wg] %}
         {% for yang in artifact['models'] %}
           {% if cnt.append(cnt.pop() + 1) %}{% endif %} 
-          <tr>
+          <tr class="doc" id="{{artifact['name']}}">
             <td>{{cnt[0]}}</td>
-            <td><a href='{{artifact['url']}}'>{{artifact['name']}}</a></td>
-            <td>{{artifact['category']}}</td>
-            <td>{{yang}}</td>
+            <td class="doc_name"><a target="_blank" href='{{artifact['url']}}'>{{artifact['name']}}</a></td>
+            <td class="doc_category">{{artifact['category']}}</td>
+            <td class="doc_yang">{{yang}}</td>
           </tr>
         {% endfor %}
       {% endfor %}
