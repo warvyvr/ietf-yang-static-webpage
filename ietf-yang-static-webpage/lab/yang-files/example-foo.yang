@@ -1,0 +1,5 @@
+module example-foo {
+  namespace "http://example.com/ns/foo";
+  prefix f;
+  container foo;
+}

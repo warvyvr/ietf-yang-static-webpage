@@ -1,0 +1,47 @@
+module example-system {
+  yang-version 1.1;
+  namespace urn:example:system;
+  prefix sys;
+  import ietf-inet-types {
+    prefix inet;
+  }
+  container system {
+    leaf hostname {
+      type string;
+    }
+    list interface {
+      key name;
+      leaf name {
+        type string;
+      }
+      container auto-negotiation {
+        leaf enabled {
+          type boolean;
+          default true;
+        }
+        leaf speed {
+          type uint32;
+          units mbps;
+          description
+            "The advertised speed, in mbps.";
+        }
+      }
+      leaf speed {
+        type uint32;
+        units mbps;
+        config false;
+        description
+          "The speed of the interface, in mbps.";
+      }
+      list address {
+        key ip;
+        leaf ip {
+          type inet:ip-address;
+        }
+        leaf prefix-length {
+          type uint8;
+        }
+      }
+    }
+  }
+}

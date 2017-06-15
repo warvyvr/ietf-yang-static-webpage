@@ -1,0 +1,34 @@
+module vendor-syslog-types-example {
+  namespace "urn:vendor:params:xml:ns:yang:vendor-syslog-types";
+  prefix vendor-syslogtypes;
+
+  import ietf-syslog {
+    prefix syslogtypes;
+  }
+
+  organization "Example, Inc.";
+  contact
+    "Example, Inc.
+     Customer Service
+
+     E-mail: syslog-yang@example.com";
+
+  description
+    "This module contains a collection of vendor-specific YANG type
+     definitions for SYSLOG.";
+
+  revision 2017-03-13 {
+    description
+      "Version 1.0";
+    reference
+      "Vendor SYSLOG Types: SYSLOG YANG Model";
+  }
+
+  identity vendor_specific_type_1 {
+    base syslogtypes:syslog-facility;
+  }
+
+  identity vendor_specific_type_2 {
+    base syslogtypes:syslog-facility;
+  }
+}

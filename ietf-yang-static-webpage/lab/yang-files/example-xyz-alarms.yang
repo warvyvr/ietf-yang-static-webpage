@@ -1,0 +1,33 @@
+module example-xyz-alarms {
+  namespace "urn:example:xyz-alarms";
+  prefix xyz-al;
+  import ietf-alarms {
+    prefix al;
+  }
+  identity xyz-alarms {
+    base al:alarm-identity;
+  }
+  identity communications-alarm {
+    base xyz-alarms;
+  }
+  identity quality-of-service-alarm {
+    base xyz-alarms;
+  }
+  identity processing-error-alarm {
+    base xyz-alarms;
+  }
+  identity equipment-alarm {
+    base xyz-alarms;
+  }
+  identity environmental-alarm {
+    base xyz-alarms;
+  }
+  // communications alarms
+  identity link-alarm {
+    base communications-alarm;
+  }
+  // QoS alarms
+  identity high-jitter-alarm {
+    base quality-of-service-alarm;
+  }
+}

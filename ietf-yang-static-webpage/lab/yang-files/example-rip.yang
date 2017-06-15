@@ -1,0 +1,96 @@
+module example-rip {
+  yang-version "1.1";
+  namespace "http://example.com/rip";
+  prefix "rip";
+  import ietf-interfaces {
+    prefix "if";
+  }
+  import ietf-routing {
+    prefix "rt";
+  }
+  identity rip {
+    base rt:routing-protocol;
+    description
+      "Identity for the Routing Information Protocol (RIP).";
+  }
+  typedef rip-metric {
+    type uint8 {
+      range "0..16";
+    }
+  }
+  grouping route-content {
+    description
+      "This grouping defines RIP-specific route attributes.";
+    leaf metric {
+      type rip-metric;
+    }
+    leaf tag {
+      type uint16;
+      default "0";
+      description
+        "This leaf may be used to carry additional info, e.g.,
+         autonomous system (AS) number.";
+    }
+  }
+  augment "/rt:routing-state/rt:ribs/rt:rib/rt:routes/rt:route" {
+    when "derived-from-or-self(rt:source-protocol, 'rip:rip')" {
+      description
+        "This augment is only valid for a route whose source
+         protocol is RIP.";
+    }
+    description
+      "RIP-specific route attributes.";
+    uses route-content;
+  }
+  augment "/rt:routing-state/rt:ribs/rt:rib/rt:active-route/"
+        + "rt:output/rt:route" {
+    description
+      "RIP-specific route attributes in the output of 'active-route'
+       RPC.";
+    uses route-content;
+  }
+  augment "/rt:routing/rt:control-plane-protocols/"
+        + "rt:control-plane-protocol" {
+    when "derived-from-or-self(rt:type,'rip:rip')" {
+      description
+        "This augment is only valid for a routing protocol instance
+         of type 'rip'.";
+    }
+    container rip {
+      presence "RIP configuration";
+      description
+        "RIP instance configuration.";
+      container interfaces {
+        description
+          "Per-interface RIP configuration.";
+        list interface {
+          key "name";
+          description
+            "RIP is enabled on interfaces that have an entry in this
+             list, unless 'enabled' is set to 'false' for that
+             entry.";
+          leaf name {
+            type if:interface-ref;
+          }
+          leaf enabled {
+            type boolean;
+            default "true";
+          }
+          leaf metric {
+            type rip-metric;
+            default "1";
+          }
+        }
+      }
+      leaf update-interval {
+        type uint8 {
+          range "10..60";
+        }
+        units "seconds";
+        default "30";
+        description
+          "Time interval between periodic updates.";
+      }
+    }
+  }
+}

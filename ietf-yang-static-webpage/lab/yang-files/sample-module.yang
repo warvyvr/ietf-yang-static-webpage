@@ -1,0 +1,19 @@
+module sample-module {
+  ...
+  import ietf-module-tags {
+    prefix mtags;
+  }
+  ...
+  container module-tags {
+    description
+      "A list of classification tags associated with this
+       module. The following predefined tags <MUST|SHOULD|MAY>
+       be included by an implementation:
+         - ietf:foo
+         - ietf:bar
+         - ...
+      ";
+    uses mtags:module-tags;
+  }
+  ...
+}

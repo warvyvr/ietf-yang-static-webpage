@@ -7,6 +7,8 @@
   <h3 align="center">IETF YANG model dashboard</h3>
   <h8 align="center">The website is deisgned to provide an overview of all YANG models on IETF website </h8>
   <br/>
+  <h8 align="center">watch or like the <a href="https://github.com/warvyvr/ietf-yang-static-webpage" target="_blank">project</a> on github, new request is welcome! </h8>
+  <br/>
   <a align="center"><i>last sync time(UTC):{{t}}</i></a>
 </div>
 <div class="container">

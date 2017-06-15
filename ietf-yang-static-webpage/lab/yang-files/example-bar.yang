@@ -1,0 +1,5 @@
+module example-bar {
+  namespace "http://example.com/ns/bar";
+  prefix b;
+  typedef foo { type uint32; }
+}

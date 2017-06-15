@@ -1,0 +1,16 @@
+module example-module {
+  namespace "http://example.com/ns/example-module";
+  prefix mymod;
+  import iana-if-type { prefix iana; }
+  import ietf-interfaces { prefix if; }
+  identity some-new-iftype {
+     base iana:iana-interface-type;
+  }
+  augment "/if:interfaces/if:interface" {
+     when "if:type = 'mymod:some-new-iftype'";
+     leaf mandatory-leaf {
+        mandatory true;
+        ...
+     }
+  }
+}

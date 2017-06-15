@@ -4,14 +4,12 @@ import jinja2
 import json
 import re
 
-from HTMLParser import HTMLParser
 
 def render(template_path, context):
     path, filename = os.path.split(template_path)
     return jinja2.Environment(
         loader=jinja2.FileSystemLoader(path or './')
     ).get_template(filename).render(context)
-
 
 
 def dashboard(data):
@@ -107,7 +105,7 @@ def generate_search_info(input_files, folder):
             bs = BeautifulSoup(open(file), "html.parser")
             for item in bs.find_all("tr","doc"):
                 location = "/%s#%s" %(os.path.split(file)[1], item.find("td","doc_name").string)
-                content = " ".join([i.string for i in item.find_all("td")[1:]])
+                content = " ".join([i.string for i in item.find_all("td")[1:-1]])
                 content += " " + item.find("td","doc_name").a['href']
                 title = item.find("td","doc_name").string
 

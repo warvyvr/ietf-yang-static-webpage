@@ -1,0 +1,315 @@
+module ietf-te-path-computation {
+  yang-version 1.1;
+  namespace "urn:ietf:params:xml:ns:yang:ietf-te-path-computation";
+  // replace with IANA namespace when assigned
+  prefix "tepc";
+  import ietf-inet-types {
+    prefix "inet";
+  }
+  import ietf-yang-types {
+    prefix "yang-types";
+  }
+  import ietf-te-types {
+    prefix "te-types";
+  }
+  import ietf-te-topology {
+    prefix "tet";
+  }
+  import ietf-network-topology {
+    prefix "nt";
+  }
+  organization
+    "Traffic Engineering Architecture and Signaling (TEAS)
+     Working Group";
+  contact
+    "WG Web:   <http://tools.ietf.org/wg/teas/>
+     WG List:  <mailto:teas@ietf.org>
+     WG Chair: Lou Berger
+               <mailto:lberger@labn.net>
+     WG Chair: Vishnu Pavan Beeram
+               <mailto:vbeeram@juniper.net>
+   ";
+  description "YANG model for stateless TE path computation";
+  revision "2016-10-10" {
+    description "Initial revision";
+    reference "YANG model for stateless TE path computation";
+  }
+  /*
+   * Features
+   */
+  feature stateless-path-computation {
+    description
+      "This feature indicates that the system supports
+       stateless path computation.";
+  }
+  /*
+   * Typedefs
+   */
+  typedef DirectiveValue {
+    type enumeration {
+      enum MINIMIZE {
+        description "Minimize directive.";
+      }
+      enum MAXIMIZE {
+        description "Maximize directive.";
+      }
+      enum ALLOW {
+        description "Allow directive.";
+      }
+      enum DISALLOW {
+        description "Disallow directive.";
+      }
+      enum DONT_CARE {
+        description "Don't care directive.";
+      }
+    }
+    description "Value to determine optimization type.";
+  }
+  typedef ObjectiveFunction {
+    type enumeration {
+      enum MCP {
+        description "MCP.";
+      }
+      enum MLP  {
+        description "MLP.";
+      }
+      enum MBP  {
+        description "MBP.";
+      }
+      enum MBC  {
+        description "MBC.";
+      }
+      enum MLL  {
+        description "MLL.";
+      }
+      enum MCC  {
+        description "MCC.";
+      }
+    }
+    description "RFC 5541 - Encoding of Objective Functions in the
+      Path Computation Element Communication Protocol (PCEP)";
+  }
+  /*
+   * Groupings
+   */
+  grouping Path {
+    list _telink {
+      key 'link-ref';
+      config false;
+      uses nt:link-ref;
+      description "List of telink refs.";
+    }
+    container _routingConstraint {
+      config false;
+      uses RoutingConstraint;
+      description "Extended routing constraints.";
+    }
+    leaf path-id {
+      type yang-types:uuid;
+      config false;
+      description "path-id ref.";
+    }
+    description "Path is described by an ordered list of TE Links.";
+  }
+  grouping PathCompServicePort {
+    leaf source {
+      type inet:ip-address;
+      description "TE tunnel source address.";
+    }
+    leaf destination {
+      type inet:ip-address;
+      description "P2P tunnel destination address";
+    }
+    leaf src-tp-id {
+      type binary;
+      description "TE tunnel source termination point identifier.";
+    }
+    leaf dst-tp-id {
+      type binary;
+      description "TE tunnel destination termination point
+identifier.";
+    }
+    uses te-types:bidir-assoc-properties;
+    description "Path Computation Service Port grouping.";
+  }
+  grouping PathComputationService {
+    leaf-list _path-ref {
+      type leafref {
+        path '/paths/path/path-id';
+      }
+      config false;
+      description "List of previously computed path references.";
+    }
+    container _servicePort {
+      uses PathCompServicePort;
+      description "Path Computation Service Port.";
+    }
+    container _routingConstraint {
+      uses RoutingConstraint;
+      description "Routing constraints.";
+    }
+    container _objectiveFunction {
+      uses PathObjectiveFunction;
+      description "Path Objective Function.";
+    }
+    container _optimizationConstraint {
+      uses PathOptimizationConstraint;
+      description "Path Optimization Constraint.";
+    }
+    description "Path computation service.";
+  }
+  grouping PathObjectiveFunction {
+    leaf objectiveFunction {
+      type ObjectiveFunction;
+      config false;
+      description "Objective Function.";
+    }
+    description "Path Objective Function.";
+  }
+  grouping PathOptimizationConstraint {
+    leaf trafficInterruption {
+      type DirectiveValue;
+      config false;
+      description "Traffic Interruption.";
+    }
+    description "Path Optimization Constraint.";
+  }
+  grouping RoutingConstraint {
+    leaf requestedCapacity {
+      type tet:te-bandwidth;
+      config false;
+      description "Capacity required for connectivity service.";
+    }
+    container pathConstraints {
+      config false;
+      uses te-types:path-constraints;
+      description "Service connectivity path selection properties";
+    }
+    uses te-types:bidir-assoc-properties;
+    // path-constaints contains include topology
+  /*leaf _includeTopology {
+      uses te-types:te-topology-ref;
+      config false;
+    }*/
+    container _avoidTopology {
+      uses tet:te-topology-ref;
+      config false;
+      description "Topology to be avoided.";
+    }
+    // path-constrains already include/exclude path
+  /*list _includePath {
+      key 'link-ref';
+      config false;
+      uses nt:link-ref;
+    }*/
+  /*list _excludePath {
+      key 'link-ref';
+      config false;
+      uses nt:link-ref;
+    }*/
+    description "Extended routing constraints. Created to align with
+path-constaints.";
+  }
+  /*
+   * Root container
+   */
+  container paths {
+    list path {
+      key "path-id";
+      uses Path;
+      config false;
+      description "List of previous computed paths.";
+    }
+    description "Root container for path-computation";
+  }
+  container pathComputationService {
+    uses PathComputationService;
+    description "Service for computing paths.";
+  }
+  /***********************
+  * package Interfaces
+  **********************/
+  rpc statelessComputeP2PPath {
+    description "statelessComputeP2PPath";
+    input {
+      list servicePort {
+        min-elements 1;
+        uses PathCompServicePort;
+        description "List of service ports.";
+      }
+      container routingConstraint {
+        uses RoutingConstraint;
+        description "routing constraint.";
+      }
+      container objectiveFunction {
+        uses PathObjectiveFunction;
+        description "objective function.";
+      }
+    }
+    output {
+      container pathCompService {
+          uses PathComputationService;
+          description "Path computation service.";
+      }
+    }
+  }
+  /**rpc computeP2PPath {
+    input {
+      list servicePort {
+        min-elements 2;
+        max-elements 2;
+        uses PathCompServicePort;
+      }
+      container routingConstraint {
+        uses RoutingConstraint;
+      }
+      container objectiveFunction {
+        uses PathObjectiveFunction;
+      }
+    }
+    output {
+      container pathCompService {
+        uses PathComputationService;
+      }
+    }
+  }*/
+  rpc optimizeP2PPath {
+    description "optimizeP2PPath.";
+    input {
+      leaf pathIdOrName {
+        type string;
+        description "path id or path name.";
+      }
+      container routingConstraint {
+        uses RoutingConstraint;
+        description "routing constraint.";
+      }
+      container optimizationConstraint {
+        uses PathOptimizationConstraint;
+        description "optimizationConstraint.";
+      }
+      container objectiveFunction {
+        uses PathObjectiveFunction;
+        description "objective function.";
+      }
+    }
+    output {
+      container pathCompService {
+        uses PathComputationService;
+        description "path computation service.";
+      }
+    }
+  }
+  /**rpc deleteP2PPath {
+    input {
+      leaf pathIdOrName {
+        type string;
+      }
+    }
+    output {
+      container pathCompService {
+        uses PathComputationService;
+      }
+    }
+  }*/
+}

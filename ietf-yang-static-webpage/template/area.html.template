@@ -14,18 +14,24 @@
       <th>Document Name</th>
       <th>Document Type</th>
       <th>Model Name</th>
+      <th>Download</th>
     </tr>
   </thead>
   <tbody>
-      {% set cnt = [0]%}
-      {% for artifact in data[area_name][wg] %}
-        {% for yang in artifact['models'] %}
-          {% if cnt.append(cnt.pop() + 1) %}{% endif %} 
+      {% set cnt = [0] -%}
+      {% for artifact in data[area_name][wg] -%}
+        {% for yang in artifact['models'] -%}
+          {% if cnt.append(cnt.pop() + 1) -%}{% endif %} 
           <tr class="doc" id="{{artifact['name']}}">
             <td>{{cnt[0]}}</td>
             <td class="doc_name"><a target="_blank" href='{{artifact['url']}}'>{{artifact['name']}}</a></td>
             <td class="doc_category">{{artifact['category']}}</td>
-            <td class="doc_yang">{{yang}}</td>
+            <td class="doc_yang"><a target="_blank" href='./yang-files/{{yang}}'>{{yang}}</a></td>
+            <td class="doc_download">
+              <a href="./yang-files/{{yang}}" download>
+                <img src="./download.png" alt="download {{yang}} file yang" width="20%">
+              </a>
+            </td>
           </tr>
         {% endfor %}
       {% endfor %}

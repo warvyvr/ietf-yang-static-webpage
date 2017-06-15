@@ -1,0 +1,9 @@
+module example-one {
+  namespace "http://example.com/ns/one";
+  prefix one;
+  import example-foo { prefix f; }
+  import example-bar { prefix b; }
+  augment "/f:foo" {
+     leaf foo { type b:foo; }
+  }
+}
